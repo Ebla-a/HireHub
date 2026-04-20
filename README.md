@@ -322,6 +322,16 @@ Error Examples
   "message": "this action is for freelancers only"
 }
 ```
+``` bash
+{
+    "message": "Sorry, you must verify your account first in order to perform this operation"
+}
+```
+``` bash
+{
+    "message": "Unauthenticated."
+}
+```
 
 
 
