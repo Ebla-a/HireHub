@@ -1,5 +1,3 @@
-#HireHub API
-Freelance Marketplace Backend built with Laravel 12
 
 ## Overview
 HireHub is a RESTful API for a freelance marketplace connecting clients and freelancers.
