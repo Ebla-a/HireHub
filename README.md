@@ -1,59 +1,133 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+#HireHub API
+Freelance Marketplace Backend built with Laravel 12
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+HireHub is a RESTful API for a freelance marketplace connecting clients and freelancers.
 
-## About Laravel
+## Clients post projects
+Freelancers submit offers
+Projects are completed and reviewed
+System enforces real-world business rules
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
+Laravel 12
+PHP 8.2
+MySQL / PostgreSQL
+REST API (JSON responses only)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
+User roles: client, freelancer ,admin
+Freelancer verification system
+Projects with budgets (fixed / hourly)
+offers system with auto-rejection logic
+Reviews & ratings
+Filtering & sorting (projects & freelancers)
+Performance optimized queries
+Clean architecture (Service-based)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Issue
+N+1 queries in project listing & profiles
+Fix
+Eager loading (with)
+withCount() for counts
+## Result
+Reduced queries
+Faster responses
 
-## Learning Laravel
+## API Endpoints
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Public Endpoints
+Authentication
+POST /api/register → Register new user
+POST /api/login → Login
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Public Endpoints
+Authentication
+POST /api/register → Register new user
+POST /api/login → Login
 
-## Laravel Sponsors
+## User & Profile
+GET /api/user → Get authenticated user
+GET /api/dashboard → Dashboard data
+## Profile
+GET /api/profile → Get current user profile
+PUT /api/profile → Update profile
+## Freelancers
+GET /api/freelancers → List freelancers
+## Projects (Public Read)
+GET /api/projects → List projects
+GET /api/projects/{project} → Project details
+## Notifications
+GET /api/notifications → Get user notifications
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Role-Based Endpoints
 
-### Premium Partners
+### Client Endpoints
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Middleware: role.client
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Projects Management
 
-## Code of Conduct
+POST /api/projects → Create project
+PUT /api/projects/{project} → Update project
+DELETE /api/projects/{project} → Delete project
+### Offers
+POST /api/offers/{offer}/accept → Accept offer
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+### Freelancer Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Middleware: role.freelancer + verified.freelancer
 
-## License
+### Offers 
+POST /api/projects/{project}/offers → Submit offer (bid)
+GET /api/my-offers → Get my offers
+DELETE /api/offers/{offer} → Delete offer
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Admin Endpoints
+
+Middleware: is_admin
+
+POST /api/admin/verify/{profile} → Verify freelancer
+
+## Seeder
+``` bash
+php artisan migrate --seed
+```
+Includes:
+
+Users
+Projects
+offers
+Skills
+
+## Architecture
+Controllers → HTTP layer
+Services → business logic
+Models → relationships
+Form Requests → validation
+
+## Principles
+SOLID
+Clean Code
+Scalable design
+
+## Installation
+``` bash
+git clone <repo-url>
+cd hirehub
+
+composer install
+
+cp .env.example .env
+php artisan key:generate
+
+php artisan migrate --seed
+
+php artisan serve
+
+```
+
+
+
