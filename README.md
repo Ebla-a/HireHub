@@ -9,18 +9,29 @@ System enforces real-world business rules
 
 ## Tech Stack
 Laravel 12
+
 PHP 8.2
-MySQL / PostgreSQL
+
+MySQL
+
 REST API (JSON responses only)
+
 
 ## Features
 User roles: client, freelancer ,admin
+
 Freelancer verification system
+
 Projects with budgets (fixed / hourly)
+
 offers system with auto-rejection logic
+
 Reviews & ratings
+
 Filtering & sorting (projects & freelancers)
+
 Performance optimized queries
+
 Clean architecture (Service-based)
 
 ## Issue
