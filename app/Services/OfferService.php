@@ -1,0 +1,60 @@
+<?php 
+
+namespace App\Services;
+
+use App\Models\Offer;
+use App\Notifications\OfferAcceptedNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
+class OfferService 
+{
+
+/**
+ * create new offer 
+ * @param array $data
+ * @return Offer
+ */
+public function storeOffer(array $data)
+    {
+       
+        $exists = Offer::where('project_id', $data['project_id'])
+            ->where('user_id', auth('sanctum')->id())
+            ->exists();
+
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'project_id' => 'you have aplied this offer before' 
+            ]);
+        }
+
+
+        $data['user_id'] = auth('sanctum')->id();
+        return Offer::create($data);
+}
+
+/**
+ * accept an offer and close the project
+ * @param Offer $offer
+ */
+public function acceptOffer(Offer $offer)
+{
+    return DB::transaction(function () use ($offer){
+
+        $offer->update(['status' => 'accepted']);
+
+        $offer->project->update(['status' => 'in_progress']);
+        $freelancer = $offer->user;
+        $freelancer->notify(new OfferAcceptedNotification($offer));
+        // Automatically reject the remaining offers
+        $offer->project->offers()
+        ->where('id' , '!=', $offer->id)
+        ->update(['status' =>'rejected']);
+
+        return $offer;
+
+    });
+}
+
+
+}
