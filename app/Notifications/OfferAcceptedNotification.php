@@ -28,7 +28,7 @@ class OfferAcceptedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database','mail'];
+        return ['database'];
     }
 
     /**
@@ -50,10 +50,10 @@ class OfferAcceptedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'offer_id' =>$this->offer->offer_id,
+            'offer_id' =>$this->offer->id,
             'project_id'   => $this->offer->project_id,
             'project_title'=> $this->offer->project->title,
-            'message' => 'congrats your offer  has been accepted' .$this->offer->project->title,
+            'message' => 'Congrats, your offer has been accepted: ' . $this->offer->project->title,
             'action_url'   => "/projects/" . $this->offer->project_id,
         ];
     }

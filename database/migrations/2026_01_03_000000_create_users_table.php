@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role',['client','freelancer','admin'])->default('freelancer');
             $table->foreignId('city_id')->constrained()->OnDelete('cascade');
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

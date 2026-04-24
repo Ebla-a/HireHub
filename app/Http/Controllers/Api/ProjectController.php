@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Services\ProjectService;
@@ -48,7 +49,7 @@ class ProjectController extends Controller
         return new ProjectResource($project);
     }
 
-    public function update(StoreProjectRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
        
      $this->authorize('update' , $project);
@@ -57,7 +58,7 @@ class ProjectController extends Controller
         return new ProjectResource($updatedProject);
     }
 
-    public function destroy(Project $project)
+     public function destroy(Project $project)
     {
        $this->authorize('delete' , $project);
 

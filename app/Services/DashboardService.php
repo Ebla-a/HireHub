@@ -21,8 +21,7 @@ class DashboardService
             'total_projects'    => $user->projects()->count(),
             'active_projects'   => $user->projects()->where('status', 'in_progress')->count(),
             'completed_projects'=> $user->projects()->where('status', 'completed')->count(),
-            'total_spent'       => $user->projects()
-                                    ->join('offers', 'projects.id', '=', 'offers.project_id')
+            'total_spent'       => Project::where('user_id', $user->id)
                                     ->where('offers.status', 'accepted')
                                     ->sum('offers.amount'),
             'pending_offers'    => Offer::whereIn('project_id', $user->projects()->pluck('id'))

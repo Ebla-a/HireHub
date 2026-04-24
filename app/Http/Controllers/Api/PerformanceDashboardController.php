@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Api\Controllers;
+namespace App\Http\Controllers\Api;
+
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiLog;
-use Illuminate\Support\Facades\DB;
+
 
 class PerformanceDashboardController extends Controller
 {

@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/freelancers', [ProfileController::class, 'index']);
 
 
-Route::prefix('admin')->middleware(['auth:sanctum', 'is_admin'])->group(function () {
+Route::prefix('admin')->middleware('is_admin')->group(function () {
     
 
     Route::post('/verify/{profile}', [FreelancerVerificationController::class, 'verify']);
@@ -49,7 +51,10 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'is_admin'])->group(function
     //  Shared Project Routes (Read-only)
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::get('/projects/{project}', [ProjectController::class, 'show']);
-    Route::get('/notifications', fn () => auth('sanctum')->user()->notifications);
+   Route::get('/notifications', function () {
+    return auth('sanctum')->user()->notifications()->limit(20)->get();
+});
+
 
     /*
     |--------------------------------------------------------------------------
@@ -59,13 +64,17 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'is_admin'])->group(function
 
     // Client Only: Project Management & Accepting Offers
     Route::middleware('role.client')->group(function () {
+        Route::post('/projects/{project}/offers/{offer}/accept', [OfferController::class, 'accept']);
+           Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
         Route::post('/projects', [ProjectController::class, 'store']);
         Route::put('/projects/{project}', [ProjectController::class, 'update']);
-        Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
-        
-        Route::post('/offers/{offer}/accept', [OfferController::class, 'accept']);
-
+        Route::get('/projects/{project}/offers', [OfferController::class, 'index']);
       
+        
+       
+
+
+
     });
 
     // Freelancer Only: Bidding & Offer Management

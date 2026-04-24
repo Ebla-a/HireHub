@@ -21,7 +21,7 @@ class Offer extends Model
     public function casts()
     {
         return [
-            'price' => 'decimal:2',
+            'amount' => 'decimal:2',
             'delivery_days' => 'integer',
         ];
     }
@@ -38,7 +38,7 @@ public function project():BelongsTo
 
  * @return BelongsTo<User, Offer>
  */
-public function freelancer():BelongsTo
+public function user():BelongsTo
 {
     return $this->belongsTo(User::class,'user_id');
 }

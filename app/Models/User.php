@@ -102,8 +102,27 @@ class User extends Authenticatable
 public function getAverageRatingAttribute()
 {
     
-    return round($this->reviews()->avg('rating') ?? 0, 1);
+    return round($this->profile->reviews()->avg('rating') ?? 0, 1);
 }
+
+public function reviewsWritten()
+{
+    return $this->hasMany(Review::class, 'reviewer_id');
+}
+
+public function country()
+{
+    return $this->hasOneThrough(
+        Country::class,
+        City::class,
+        'id',        // city.id
+        'id',        // country.id
+        'city_id',   // users.city_id
+        'country_id' // cities.country_id
+    );
+}
+
+
 
 
 

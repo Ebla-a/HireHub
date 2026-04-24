@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Offer;
 use App\Models\Project;
 use App\Models\User;
 
@@ -54,7 +55,9 @@ class ProjectPolicy
      */
     public function acceptOffer(User $user, Project $project): bool
     {
-        return $user->id === $project->user_id;
+        {
+           return $project->user_id === $user->id;
+        }
     }
 }
     

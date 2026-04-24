@@ -13,18 +13,17 @@ class FreelancerVerificationController extends Controller
 
     if (empty($profile->bio) || empty($profile->hourly_rate)) {
         return response()->json([
-            'message' => 'Cannot verify. Profile information (bio, rate) is incomplete.'
+            'message' => 'Cannot verify Profile information (bio, rate) is incomplete.'
         ], 422);
     }
 
     $profile->update([
-        'is_verified' => true,
-        // 'verified_at' => now(), 
+        'is_verified' => true, 
     ]);
 
     return response()->json([
         'status' => 'success',
-        'message' => "Freelancer {$profile->user->name} is now verified."
+        'message' => "Freelancer {$profile->user->full_name} is now verified."
     ]);
 }
 }

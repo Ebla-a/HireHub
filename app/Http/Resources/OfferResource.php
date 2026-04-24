@@ -16,6 +16,7 @@ class OfferResource extends JsonResource
     {
         return [
         'id'              => $this->id,
+         'user_id'         => $this->user_id,
         'amount'          => '$' . number_format($this->amount, 2),
         'delivery_days'   => $this->delivery_days . ' day',
         'proposal_letter' => $this->proposal_letter,
@@ -25,3 +26,6 @@ class OfferResource extends JsonResource
     ];
     }
 }
+
+
+

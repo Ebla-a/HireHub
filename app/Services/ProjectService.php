@@ -21,7 +21,7 @@ class ProjectService
     {
         return Project::query()
             ->open()
-            ->with(['user.city.country', 'tags']) 
+            ->with(['user.city.country', 'tags', 'offers.user', 'attachments'])
             ->withCount('offers')
             ->when($filters['min_budget'] ?? null, function($query, $minBudget) {
                 $query->highBudget($minBudget);
@@ -69,10 +69,27 @@ class ProjectService
      * @return Project
      */
     public function updateProject(Project $project, array $data)
-    {
-        $project->update($data);
-        return $project;
-    }
+{
+    return DB::transaction(function () use ($project, $data) {
+
+        $project->update(
+            collect($data)->except(['tags', 'attachments'])->toArray()
+        );
+
+    
+        if (isset($data['tags'])) {
+            $project->tags()->sync($data['tags']);
+        }
+
+      
+        if (isset($data['attachments'])) {
+            $this->fileService->uploadMultiple($project, $data['attachments'], 'project_files');
+        }
+
+        return $project->load(['tags', 'attachments', 'user']);
+    });
+}
+
  
     /**
      * delete project

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->boolean("is_verified")->default(false);
             $table->json('portfolio_links')->nullable();
+            $table->decimal('rating', 3, 2)->default(0);
+            $table->json('skills_summary')->nullable();
+
             $table->timestamps();
         });
     }

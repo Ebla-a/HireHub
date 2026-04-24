@@ -21,18 +21,19 @@ class ProfileUpdateRequest extends FormRequest
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-  
-        return [
-            'bio'             => 'nullable|string|max:1500',
-            'hourly_rate'     => 'nullable|numeric|min:0|max:999.99',
-            'phone_number'    => 'nullable|string|max:20',
-            'portfolio_links' => 'nullable|array',
-            'portfolio_links.*' => 'url', 
-            'skills'          => 'nullable|array',
-            'skills.*'        => 'integer|exists:skills,id',
-            // 'skills.*.years_of_experience' => 'required_with:skills|integer|min:0|max:50',
-        ];
-    }
+{
+    return [
+        'bio'             => 'sometimes|string|max:1500',
+        'hourly_rate'     => 'sometimes|numeric|min:0|max:999.99',
+        'phone_number'    => 'sometimes|string|max:20',
+
+        'portfolio_links' => 'sometimes|array',
+        'portfolio_links.*' => 'url',
+
+        'skills'          => 'sometimes|array',
+        'skills.*'        => 'integer|exists:skills,id',
+    ];
+}
+
     
 }

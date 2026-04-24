@@ -2,13 +2,28 @@
 
 namespace App\Services;
 
+
 use App\Models\Offer;
+use App\Models\Project;
 use App\Notifications\OfferAcceptedNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class OfferService 
 {
+public function getProjectOffers(Project $project)
+{
+
+    if (auth('sanctum')->id() !== $project->user_id) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    return $project->offers()
+        ->with(['user.profile']) 
+        ->latest()
+        ->get();
+}
+
 
 /**
  * create new offer 
@@ -55,6 +70,31 @@ public function acceptOffer(Offer $offer)
 
     });
 }
+
+public function deleteOffer(Offer $offer)
+{
+  
+   if ($offer->user_id !== auth('sanctum')->id()) {
+        abort(403, 'You are not authorized to delete this offer.');
+    }
+
+    return $offer->delete();
+}
+
+public function getMyOffers()
+{
+    return auth('sanctum')->user()
+        ->offers()
+        ->with([
+            'project.tags',
+            'project.user',
+            'project.attachments'
+        ])
+        ->latest()
+        ->get();
+}
+
+
 
 
 }

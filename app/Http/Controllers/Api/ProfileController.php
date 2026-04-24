@@ -8,7 +8,8 @@ use App\Http\Requests\ProfileUpdateRequest ;
 
 use App\Services\ProfileService;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
+
 
 class ProfileController extends Controller
 {

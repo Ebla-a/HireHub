@@ -20,6 +20,7 @@ class FreelancerProfile extends Model
         'availability',
         'phone_number',
         'portfolio_links',
+        'is_verified',
 
     ];
     protected $appends = ['rating_stars', 'joined_since'];

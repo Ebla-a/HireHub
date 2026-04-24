@@ -20,6 +20,8 @@ public function getProfile(User $user)
         'profile.skills', 
         'profile.reviews'
     ]);
+
+
 }
 
 
@@ -29,7 +31,7 @@ public function getAllFreelancers()
         ->available()
         ->with(['user', 'skills'])
         ->withAvg('reviews', 'rating')
-        ->latest()
+        ->orderByDesc('reviews_avg_rating')
         ->paginate(15);
 }
 

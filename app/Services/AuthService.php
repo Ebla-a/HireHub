@@ -1,6 +1,7 @@
 <?php 
 namespace App\Services;
 
+use App\Models\FreelancerProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException ;
@@ -23,6 +24,19 @@ class AuthService
             'role'     => $data['role'],
             'city_id' => $data['city_id'] ?? 1,
         ]);
+        if ($user->role === 'freelancer') {
+    FreelancerProfile::create([
+        'user_id' => $user->id,
+        'bio' => '',
+        'hourly_rate' => 0,
+        'availability' => 'available',
+        'phone_number' => null,
+        'portfolio_links' => '[]',
+        'is_verified' => false,
+    ]);
+}
+
+
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
