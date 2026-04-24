@@ -332,6 +332,18 @@ Error Examples
     "message": "Unauthenticated."
 }
 ```
+ API Documentation (Postman)
+
+To make it easier to test the API, I have included a Postman collection in this repository.
+
+ How to use:
+1. **Download** the collection file: [HireHub.postman_collection.json](./HireHub.postman_collection.json)
+2. **Open** Postman.
+3. Click on the **Import** button in the top left corner.
+4. **Drag and drop** the downloaded file into Postman.
+5. Make sure to set your local environment URL (e.g., `http://localhost:8000/api`).
+
+---
 
 
 
