@@ -332,7 +332,7 @@ Error Examples
     "message": "Unauthenticated."
 }
 ```
- API Documentation (Postman)
+ ## API Documentation (Postman)
 
 To make it easier to test the API, I have included a Postman collection in this repository.
 
