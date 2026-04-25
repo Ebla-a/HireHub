@@ -47,7 +47,6 @@ class ProjectService
   public function storeProject(array $data)
     {
         return DB::transaction(function () use ($data) {
-            Cache::tags(['projects'])->flush();
             $tagIds = $data['tags'] ?? [];
             $files = $data['attachments'] ?? [];
 
@@ -83,9 +82,6 @@ class ProjectService
 {
     return DB::transaction(function () use ($project, $data) {
 
-        Cache::tags(['projects'])->flush();
-        Cache::forget("project_{$project->id}");
-
         $project->update(
             collect($data)->except(['tags', 'attachments'])->toArray()
         );
@@ -112,8 +108,6 @@ class ProjectService
     public function deleteProject(Project $project)
     {
         return DB::transaction(function () use ($project) {
-            Cache::tags(['projects'])->flush();
-            Cache::forget("project_{$project->id}");
 
              // delte the files
             foreach ($project->attachments as $attachment) {
@@ -122,4 +116,5 @@ class ProjectService
             return $project->delete();
         });
     }
+    
 }

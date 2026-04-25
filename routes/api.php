@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\api\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -69,12 +70,9 @@ Route::prefix('admin')->middleware('is_admin')->group(function () {
         Route::post('/projects', [ProjectController::class, 'store']);
         Route::put('/projects/{project}', [ProjectController::class, 'update']);
         Route::get('/projects/{project}/offers', [OfferController::class, 'index']);
-      
-        
-       
+        Route::post('/projects/{project}/reviews', [ReviewController::class, 'store']);
 
-
-
+ 
     });
 
     // Freelancer Only: Bidding & Offer Management

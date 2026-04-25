@@ -46,3 +46,4 @@ class FileService {
         return $attachment->delete();
     }
 }
+
