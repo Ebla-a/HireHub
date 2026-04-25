@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Jobs\SendProjectCreatedEmail;
 use App\Models\Project;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ProjectService 
@@ -19,7 +21,10 @@ class ProjectService
      */
     public function getFilteredProjects(array $filters)
     {
-        return Project::query()
+        $cacheKey = 'projects' . md5(json_encode($filters));
+         return Cache::remember($cacheKey , 300 , function()use ($filters)
+         {
+           return Project::query()
             ->open()
             ->with(['user.city.country', 'tags', 'offers.user', 'attachments'])
             ->withCount('offers')
@@ -31,15 +36,18 @@ class ProjectService
             })
             ->latest()
             ->paginate(5);
+
+         });
     }
     /**
-     * create new project
+     * create new project 
      * @param array $data
      * @return Project
      */
   public function storeProject(array $data)
     {
         return DB::transaction(function () use ($data) {
+            Cache::tags(['projects'])->flush();
             $tagIds = $data['tags'] ?? [];
             $files = $data['attachments'] ?? [];
 
@@ -59,8 +67,11 @@ class ProjectService
                 $this->fileService->uploadMultiple($project, $files, 'project_files');
             }
 
+            dispatch(new SendProjectCreatedEmail($project));
+
             return $project->load(['tags', 'attachments', 'user']);
         });
+
     }
     /**
      * update project
@@ -72,11 +83,13 @@ class ProjectService
 {
     return DB::transaction(function () use ($project, $data) {
 
+        Cache::tags(['projects'])->flush();
+        Cache::forget("project_{$project->id}");
+
         $project->update(
             collect($data)->except(['tags', 'attachments'])->toArray()
         );
 
-    
         if (isset($data['tags'])) {
             $project->tags()->sync($data['tags']);
         }
@@ -99,6 +112,9 @@ class ProjectService
     public function deleteProject(Project $project)
     {
         return DB::transaction(function () use ($project) {
+            Cache::tags(['projects'])->flush();
+            Cache::forget("project_{$project->id}");
+
              // delte the files
             foreach ($project->attachments as $attachment) {
                 $this->fileService->delete($attachment);
@@ -106,6 +122,4 @@ class ProjectService
             return $project->delete();
         });
     }
-
-    
 }

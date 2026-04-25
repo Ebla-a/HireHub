@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-
+use App\Jobs\RejectOtherOffers;
+use App\Jobs\SendOfferAcceptedEmail;
 use App\Models\Offer;
 use App\Models\Project;
 use App\Notifications\OfferAcceptedNotification;
@@ -61,10 +62,11 @@ public function acceptOffer(Offer $offer)
         $offer->project->update(['status' => 'in_progress']);
         $freelancer = $offer->user;
         $freelancer->notify(new OfferAcceptedNotification($offer));
-        // Automatically reject the remaining offers
-        $offer->project->offers()
-        ->where('id' , '!=', $offer->id)
-        ->update(['status' =>'rejected']);
+
+        dispatch(new SendOfferAcceptedEmail($offer));
+       dispatch(new RejectOtherOffers($offer->project));
+
+
 
         return $offer;
 
