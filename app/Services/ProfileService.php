@@ -52,10 +52,6 @@ public function updateProfile(User $user, array $data)
 {
     return DB::transaction(function () use ($user, $data) {
 
-            // clear cache before updating
-            Cache::forget("profile_{$user->id}");
-            Cache::forget('freelancers_list');
-
             $profile = $user->profile()->updateOrCreate(
                 ['user_id' => $user->id],
                 $data

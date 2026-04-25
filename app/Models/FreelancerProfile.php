@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Cache;
 
 class FreelancerProfile extends Model
 {
@@ -93,6 +94,27 @@ public function scopeActive($query)
 public function scopeAvailable($query)
 {
     return $query->where('availability', true);
+}
+
+protected static function booted()
+{
+     static::created(function($profile)
+     {
+         Cache::forget("profile_{$profile->user_id}");
+         Cache::forget("freelancers_list");
+     });
+
+    static::updated(function ($profile) {
+        Cache::forget("freelancer_profile_{$profile->id}");
+        Cache::forget("freelancers_list");
+    });
+
+    static::deleted(function ($profile) {
+        Cache::forget("freelancer_profile_{$profile->id}");
+        Cache::forget("freelancers_list");
+    });
+
+
 }
 
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Cache;
+
 
 class Project extends Model
 {
@@ -101,4 +103,24 @@ public function scopeHighBudget($query, $amount = 1000)
 {
     return $query->where('budget', '>=', $amount);
 }
+
+
+protected static function booted()
+{
+    static::created(function ($project) {
+        Cache::forget('projects_list');
+    });
+
+    static::updated(function ($project) {
+        Cache::forget("project_{$project->id}");
+        Cache::forget("projects_list");
+    });
+
+    static::deleted(function ($project) {
+        Cache::forget("project_{$project->id}");
+        Cache::forget("projects_list");
+    });
+
+}
+
 }

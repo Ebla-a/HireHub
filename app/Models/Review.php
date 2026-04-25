@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Cache;
 
 class Review extends Model
 {
@@ -39,4 +40,16 @@ class Review extends Model
     {
         return $this->morphTo();
     }
+
+
+    protected static function booted()
+{
+    static::created(function ($review) {
+     
+        Cache::forget("freelancer_profile_{$review->reviewable_id}");
+        Cache::forget("project_{$review->project_id}");
+        Cache::forget("freelancers_list");
+    });
+}
+
 }
