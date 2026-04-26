@@ -385,7 +385,7 @@ Telescope → Redis shows:
 
 This confirms the response was served from cache, not the database.
 
-Scre![Redis GET](docs/screenshotes/redis.png)
+![Redis GET](docs/screenshotes/redis.png)
 
 
 
