@@ -33,39 +33,74 @@ It supports project posting, offers, reviews, authentication, and role‑based a
 
 ---
 
-##  API Endpoints 
+##  API Endpoints
 
-### Authentication
+---
+
+##  Public Routes
 POST /api/register  
 POST /api/login  
+POST /api/logout   (auth:sanctum)
 
-### User
+---
+
+##  Protected Routes (auth:sanctum)
+
+###  User & Profile
 GET /api/user  
 GET /api/dashboard  
 
-### Profile
 GET /api/profile  
 PUT /api/profile  
 
-### Freelancers
+---
+
+##  Freelancers (Public Listing)
 GET /api/freelancers  
 
-### Projects (Public)
+---
+
+##  Notifications
+GET /api/notifications  
+
+---
+
+##  Projects (Shared Read-Only)
 GET /api/projects  
-GET /api/projects/{id}  
+GET /api/projects/{project}  
 
-### Client (role.client)
-POST /api/projects  
-PUT /api/projects/{id}  
-DELETE /api/projects/{id}  
+---
 
-### Freelancer (role.freelancer)
-POST /api/projects/{id}/offers  
-GET /api/my-offers  
-DELETE /api/offers/{id}  
+#  Role-Based Routes
 
-### Admin
+## Admin (is_admin)
 POST /api/admin/verify/{profile}
+
+---
+
+## Client Routes (role.client)
+
+### Projects Management
+POST   /api/projects  
+PUT    /api/projects/{project}  
+DELETE /api/projects/{project}  
+
+### Offers (Client Actions)
+GET  /api/projects/{project}/offers  
+POST /api/projects/{project}/offers/{offer}/accept  
+
+### Reviews
+POST /api/projects/{project}/reviews  
+
+---
+
+## Freelancer Routes (role.freelancer + verified.freelancer)
+
+### Offers
+POST   /api/projects/{project}/offers  
+GET    /api/my-offers  
+DELETE /api/offers/{offer}  
+
 
 ---
 
@@ -162,7 +197,18 @@ Caching + eager loading improved performance and eliminated unnecessary database
 
 ##  Postman Collection
 A Postman collection is included:  
-`HireHub.postman_collection.json`
+
+[`HireHub.postman_collection.json`](HireHub.postman_collection.json)
+
+## How to use:
+1. Open Postman  
+2. Click **Import**  
+3. Select the file  
+4. Set the environment variable:
+ {{base_url}} = http://localhost:8000/api
+{{client_token}} =
+{{freelancer_token}} =
+{{admin_token}}=
 
 ---
 
