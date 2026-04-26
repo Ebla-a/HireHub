@@ -352,7 +352,7 @@ improves the performance of the GET /api/projects endpoint by fixing N+1 queries
 The main branch executed many SQL queries for related models (attachments, offers, tags, cities, countries, users).
 This caused slow performance.
 
-![N+1 Problem](docs/screenshots/GET%20projects%20n+1.PNG)
+![N+1 Problem](docs/screenshotes/GEtt%20projects%20n+1.PNG)
 
 2. Eager Loading (N+1 Fixed)
 Using eager loading:
@@ -362,7 +362,7 @@ Using eager loading:
 ```
 reduced the number of queries significantly.
 
- Screenshot: docs/screenshots/GET projects.PNG
+![Eager Loading](docs/screenshotes/GET%20projects.PNG)
 
  Caching (task4 branch)
 Caching was added using:
@@ -375,18 +375,17 @@ First request → cache miss + set
 Second request → cache hit, 0 queries
 
 
-cache set.PNG
+![Cache Set](docs/screenshotes/cache%20set.PNG)
 
-get project 0 query.PNG
+![Cache Hit](docs/screenshotes/get%20project%200%20query.PNG)
 
-cache hits.PNG
 
 Redis Confirmation
 Telescope → Redis shows:
 
 This confirms the response was served from cache, not the database.
 
-Screenshot: redis get.PNG
+Scre![Redis GET](docs/screenshotes/redis.png)
 
 
 
