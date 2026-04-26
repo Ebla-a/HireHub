@@ -344,8 +344,47 @@ To make it easier to test the API, I have included a Postman collection in this 
 5. Make sure to set your local environment URL (e.g., `http://localhost:8000/api`).
 
 ---
+## Performance Optimization 
+This task improves the performance of the GET /api/projects endpoint by fixing N+1 queries and enabling caching
+1. N+1 Problem (Before Optimization)
+The main branch executed many SQL queries for related models (attachments, offers, tags, cities, countries, users).
+This caused slow performance.
+
+Screenshot: docs/screenshots/GET projects n+1.PNG
+
+2. Eager Loading (N+1 Fixed)
+Using eager loading:
+
+``` bash
+->with(['user.city.country', 'tags', 'offers.user', 'attachments']);
+```
+reduced the number of queries significantly.
+
+ Screenshot: docs/screenshots/GET projects.PNG
+
+ Caching (task4 branch)
+Caching was added using:
+
+``` bash
+Cache::remember($cacheKey, 300, function () { ... });
+```
+First request → cache miss + set
+
+Second request → cache hit, 0 queries
 
 
+cache set.PNG
+
+get project 0 query.PNG
+
+cache hits.PNG
+
+Redis Confirmation
+Telescope → Redis shows:
+
+This confirms the response was served from cache, not the database.
+
+Screenshot: redis get.PNG
 
 
 
